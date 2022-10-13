@@ -1,3 +1,4 @@
+from asyncore import write
 import requests
 import re
 base_url='https://so.gushiwen.cn/mingju/default.aspx?p={}&c=&t='
@@ -16,9 +17,8 @@ for i in range(1,21):
     ex1='<div class="contson" id=.*?>.*?<div class="contson" id=.*?>(.*?)</div>'
     org_text=re.findall(ex1,inner_text,re.S)
     org_text= ''.join(''.join(org_text))
-    org_text = re.sub('<[^<]+?>', '', org_text).replace('\n', '').strip()
+    org_text = re.sub('<[^<]+?>', '', org_text).replace('\n', '').replace('\r', '').strip()
     with open("text.txt", "a",encoding='utf-8') as fs:  
-      fs.write(str(i[1])+'  '+str(i[2])+'  '+org_text+' '+'https://so.gushiwen.cn/'+str(i[0])+'\n')  
-      # fs.close()
+      fs.write(str(i[1])+'  '+str(i[2])+'  '+org_text+' '+'https://so.gushiwen.cn/'+str(i[0])+'\n') 
 
 
