@@ -1,4 +1,5 @@
 #豆瓣电影详情爬取
+from ast import main
 import requests
 import re
 import sys
@@ -13,6 +14,10 @@ def crawl(url):
   res=requests.get(base_url,headers=headers)
   res.encoding='utf-8'
   page_text=res.text
+
+  #排名
+  ex='<span class="top250-no">(.*?)</span>'
+  rank=re.findall(ex,page_text,re.S)[0]
 
   # 标题
   # title_ex='<span property="v:itemreviewed">(.*?)</span>.*?<span class="year">(.*?)</span>'
@@ -59,6 +64,7 @@ def crawl(url):
   introduction_text=re.findall(introduction_ex,page_text,re.S)[0].replace('<br />\n','').replace(' ','').replace('\n','').replace('\u3000','')
 
   return{
+    '排名':rank,
       '电影名称':title_text,
       '导演':director_text,
       '编剧':scriptwriter_text,
@@ -73,7 +79,6 @@ def crawl(url):
       '豆瓣评分':douban_score_text,
       '评价人数':comment_text,
       '简介':introduction_text
-      
   }
 
 #豆瓣前250内容链接
@@ -97,9 +102,5 @@ for url in urls:
   content=crawl(url)
   #写入文件
   with open("text.txt", "a",encoding='utf-8') as fs:  
-      
       fs.write(str(content)+'\r\n')
   
-
-  
-# crawl('https://movie.douban.com/subject/1292720/')
