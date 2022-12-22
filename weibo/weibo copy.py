@@ -19,31 +19,8 @@ def get_hot_search():
     ex = '<td class=".*?ranktop">(.*?)</td>.*?<td class=".*?">.*?<a href="/(.*?)" target="_blank">(.*?)</a>.*?<span> (.*?)</span>'
     hot_list = re.findall(ex, page_text, re.S)
     for hot in hot_list:
-        str+=hot[0]+'--'+hot[2]+'--'+hot[3]+'--'+hot[1]+'\n'
+        str+=hot[0]+' '+hot[2]+hot[3]+' '+hot[1]+'\n'
+        print(str)
     return str
-# 发送邮箱
-def mail(text='微博热搜'):
-    mail_host="smtp.qq.com"  #设置服务器
-    mail_user="2718881989@qq.com"    #用户名
-    mail_pass="rpfjcdgchpiodcjf"   #口令
-    sender = '2718881989@qq.com'
-    receivers = ['1327185450@qq.com'] 
-    message = MIMEText(text, 'plain', 'utf-8')
-    message['From'] = Header("微博热搜", 'utf-8')
-    message['To'] =  Header("微博热搜", 'utf-8')
-    subject = '微博热搜'
-    message['Subject'] = Header(subject, 'utf-8')
-    try:
-        smtpObj = smtplib.SMTP_SSL(mail_host, 465)
-        smtpObj.login(mail_user,mail_pass)
-        smtpObj.sendmail(sender, receivers, message.as_string())
-        print ("邮件发送成功")
-    except smtplib.SMTPException:
-        print ("Error: 无法发送邮件")
-def job(n):
-    while True:
-        mail(get_hot_search())
-        time.sleep(n)
-job(20)
 
-
+get_hot_search()
